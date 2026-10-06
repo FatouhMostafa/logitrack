@@ -1,0 +1,75 @@
+# ---------- Secrets et environnement ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+k8s/secrets/*.yml
+k8s/secrets/*.yaml
+!k8s/secrets/README.md
+
+# ---------- Java / Maven ----------
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.log
+hs_err_pid*
+replay_pid*
+
+# ---------- Angular / Node ----------
+node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+npm-debug.log*
+yarn-error.log*
+.npm/
+
+# ---------- Python (ai-agent) ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+ai-agent/.cache/
+ai-agent/models/
+
+# ---------- Scripts et exécution locale ----------
+.run/
+/scripts/*
+!/scripts/smoke.sh
+*.pid
+docker/**/data/
+
+# ---------- Résultats de tests de charge ----------
+k6/results/
+*.html.report
+
+# ---------- IDE ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.project
+.classpath
+.settings/
+.factorypath
+*.swp
+
+# ---------- Claude ----------
+.claude/
+CLAUDE.md
+
+# ---------- Système ----------
+.DS_Store
+Thumbs.db
+desktop.ini
