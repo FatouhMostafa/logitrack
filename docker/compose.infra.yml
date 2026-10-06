@@ -1,0 +1,23 @@
+name: logitrack
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: logitrack-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-local}
+    ports: ["5432:5432"]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 10
+    networks: [logitrack-net]
+volumes:
+  postgres_data:
+networks:
+  logitrack-net:
+    name: logitrack-net
