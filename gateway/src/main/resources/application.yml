@@ -1,3 +1,35 @@
 spring:
   application:
     name: gateway
+
+  webflux:
+    problemdetails:
+      enabled: true
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: 2000
+            response-timeout: 5s
+          routes:
+            - id: fleet
+              uri: ${app.routes.fleet-uri}
+              predicates:
+                - Path=/api/v1/vehicles/**,/api/v1/drivers/**
+
+app:
+  routes:
+    fleet-uri: ${FLEET_URI:http://localhost:8081}
+
+server:
+  port: 8080
+
+management:
+  server:
+    port: 9080
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
