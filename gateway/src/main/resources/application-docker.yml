@@ -1,0 +1,3 @@
+app:
+  routes:
+    fleet-uri: ${FLEET_URI:http://fleet-service:8081}

@@ -7,3 +7,6 @@
 frontend/dist
 .env
 .env.*
+.claude
+CLAUDE.md
+scripts

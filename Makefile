@@ -2,9 +2,13 @@ ENV_FILE      := $(if $(wildcard .env),--env-file .env,)
 COMPOSE_INFRA := docker compose $(ENV_FILE) -f docker/compose.infra.yml
 COMPOSE_APP   := docker compose $(ENV_FILE) -f docker/compose.yml
 
-.PHONY: infra infra-down infra-reset test
+.PHONY: infra infra-down infra-reset test build up down logs
 
 infra:       ; $(COMPOSE_INFRA) up -d --wait
 infra-down:  ; $(COMPOSE_INFRA) down
 infra-reset: ; $(COMPOSE_INFRA) down -v && $(COMPOSE_INFRA) up -d --wait
 test:        ; mvn -B verify
+build:       ; mvn -B -DskipTests package
+up:          ; $(COMPOSE_APP) up -d --build --wait
+down:        ; $(COMPOSE_APP) down
+logs:        ; $(COMPOSE_APP) logs -f --tail=100

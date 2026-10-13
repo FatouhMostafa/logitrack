@@ -1,0 +1,50 @@
+name: logitrack
+
+include:
+  - compose.infra.yml
+
+services:
+  fleet-service:
+    build:
+      context: ..
+      dockerfile: docker/java.Dockerfile
+      args:
+        MODULE: services/fleet-service
+    image: logitrack/fleet-service:dev
+    container_name: logitrack-fleet
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_PASSWORD: ${DB_PASSWORD:-local}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9081/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 30s
+    networks: [logitrack-net]
+
+  gateway:
+    build:
+      context: ..
+      dockerfile: docker/java.Dockerfile
+      args:
+        MODULE: gateway
+    image: logitrack/gateway:dev
+    container_name: logitrack-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    depends_on:
+      fleet-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9080/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 20s
+    networks: [logitrack-net]
